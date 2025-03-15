@@ -258,11 +258,11 @@ $g_setting = \App\Models\GeneralSetting::where('id',1)->first();
 
 
                     <!-- Nav Item - Alerts -->
-                    <!--<li class="nav-item dropdown no-arrow mx-1">-->
-                    <!--    <a class="btn btn-info btn-sm mt-3" href="{{ url('/') }}" target="_blank">-->
-                    <!--        {{ VISIT_WEBSITE }}-->
-                    <!--    </a>-->
-                    <!--</li>-->
+                    <li class="nav-item dropdown no-arrow mx-1">
+                      <a class="btn btn-info btn-sm mt-3" href="{{ url('/') }}" target="_blank">
+                         {{ VISIT_WEBSITE }}
+                     </a>
+                    </li>
 
                     <div class="topbar-divider d-none d-sm-block"></div>
                     <!-- Nav Item - User Information -->

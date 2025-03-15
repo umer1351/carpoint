@@ -43,7 +43,7 @@ use App\Http\Controllers\Front\BlogController as BlogControllerForFront;
 use App\Http\Controllers\Front\CategoryController as CategoryControllerForFront;
 use App\Http\Controllers\Front\ContactController;
 use App\Http\Controllers\Front\FaqController as FaqControllerForFront;
-// use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\PageController;
 use App\Http\Controllers\Front\PrivacyController;
 use App\Http\Controllers\Front\TermController;
