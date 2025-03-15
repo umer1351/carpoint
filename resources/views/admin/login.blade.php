@@ -1,3 +1,6 @@
+@php
+$g_setting = \App\Models\GeneralSetting::where('id',1)->first();
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,7 +17,7 @@
     @include('admin.app_scripts')
 
 </head>
-
+    
     <body class="bg-gradient-primary">
         <div class="container v-center">
             <!-- Outer Row -->
@@ -27,8 +30,9 @@
                                 <div class="col-lg-12">
                                     <div class="p-5">
 
-                                        <div class="text-center">
-                                            <h1 class="h4 text-gray-900 mb-4">{{ ADMIN_LOGIN }}</h1>
+                                        <div class="text-center w-200">
+                                            <!--<h1 class="h4 text-gray-900 mb-4">{{ ADMIN_LOGIN }}</h1>-->
+                                            <img src="{{ asset('uploads/site_photos/'.$g_setting->logo) }}"  alt="">
                                         </div>
 
                                         <form action="{{ route('admin_login_store') }}" class="user" method="post">

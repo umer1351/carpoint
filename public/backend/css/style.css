@@ -110,7 +110,7 @@ a {
 .heading-in-tab {
     font-size: 16px;
     font-weight: 700;
-    color: #4e73df;
+    color: #ff9c2e;
     border-bottom: 1px solid #c2c2c2;
     padding-bottom: 5px;
     margin-bottom: 15px;
@@ -144,7 +144,7 @@ form.user .btn-user {
 
 .nav-pills .nav-link.active {
     color: #fff!important;
-    background-color: #4e73df!important;
+    background-color: #ff9c2e!important;
 }
 
 .iframe-container-300 iframe {
@@ -243,7 +243,7 @@ body,
 
 
 .sidebar-brand-text {
-    text-align: left;
+    /*text-align: left;*/
     width: 100%;
 }
 

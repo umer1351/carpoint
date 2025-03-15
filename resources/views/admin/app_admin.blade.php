@@ -37,7 +37,7 @@ $g_setting = \App\Models\GeneralSetting::where('id',1)->first();
         <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('admin_dashboard') }}">
             <div class="sidebar-brand-text mx-3 ttn">
                 <div class="right">
-                    <img src="{{ asset('uploads/site_photos/'.$g_setting->logo) }}" style="width: 50px;" alt="">
+                    <img src="{{ asset('uploads/site_photos/'.$g_setting->logo) }}" style="width: 90%;" alt="">
                 </div>
             </div>
         </a>
@@ -258,11 +258,11 @@ $g_setting = \App\Models\GeneralSetting::where('id',1)->first();
 
 
                     <!-- Nav Item - Alerts -->
-                    <li class="nav-item dropdown no-arrow mx-1">
-                        <a class="btn btn-info btn-sm mt-3" href="{{ url('/') }}" target="_blank">
-                            {{ VISIT_WEBSITE }}
-                        </a>
-                    </li>
+                    <!--<li class="nav-item dropdown no-arrow mx-1">-->
+                    <!--    <a class="btn btn-info btn-sm mt-3" href="{{ url('/') }}" target="_blank">-->
+                    <!--        {{ VISIT_WEBSITE }}-->
+                    <!--    </a>-->
+                    <!--</li>-->
 
                     <div class="topbar-divider d-none d-sm-block"></div>
                     <!-- Nav Item - User Information -->
