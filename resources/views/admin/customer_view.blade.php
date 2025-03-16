@@ -12,6 +12,8 @@
                         <th>{{ PHOTO }}</th>
                         <th>{{ NAME }}</th>
                         <th>{{ EMAIL }}</th>
+                        <th>{{ USER_ROLE }}</th>
+                        <th>{{ BADGE }}</th>
                         <th>{{ STATUS }}</th>
                         <th>{{ ACTION }}</th>
                     </tr>
@@ -29,6 +31,14 @@
                             </td>
                             <td>{{ $row->name }}</td>
                             <td>{{ $row->email }}</td>
+                            <td>{{ $row->user_role }}</td>
+                            <td>
+                                <div class="card-body">
+                                    @foreach($row->badges as $badge)
+                                        <img src="{{ asset('uploads/badges/'.$badge->icon) }}" class="w_20" title="{{ $badge->name }}">
+                                    @endforeach
+                                </div>
+                            </td>
                             <td>
                                 @if ($row->status == 'Active')
                                 <a href="" onclick="customerStatus({{ $row->id }})"><input type="checkbox" checked data-toggle="toggle" data-on="Active" data-off="Pending" data-onstyle="success" data-offstyle="danger"></a>

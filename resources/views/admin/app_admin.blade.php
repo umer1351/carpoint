@@ -186,6 +186,13 @@ $g_setting = \App\Models\GeneralSetting::where('id',1)->first();
             </a>
         </li>
 
+        <!-- Order Section -->
+        <li class="nav-item {{ $route == 'admin_orders' ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('admin_orders') }}">
+                <i class="far fa-caret-square-right"></i>
+                <span>Orders</span>
+            </a>
+        </li>
 
         <!-- Dynamic Pages -->
         <li class="nav-item {{ $route == 'admin_dynamic_page_view'||$route == 'admin_dynamic_page_create'||$route == 'admin_dynamic_page_edit' ? 'active' : '' }}">
@@ -213,6 +220,13 @@ $g_setting = \App\Models\GeneralSetting::where('id',1)->first();
             </a>
         </li>
 
+        <!-- Badge -->
+        <li class="nav-item {{ $route == 'admin_badges_view' ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('admin_badges_view') }}">
+                <i class="far fa-caret-square-right"></i>
+                <span>{{ BADGE }}</span>
+            </a>
+        </li>
 
         <!-- Email Template -->
         <li class="nav-item {{ $route == 'admin_email_template_view' ? 'active' : '' }}">

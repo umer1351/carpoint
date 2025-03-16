@@ -4,6 +4,7 @@
     "ERR_PASSWORD_REQUIRED": "Password is required",
     "ERR_RECAPTCHA_REQUIRED": "You must have to input recaptcha correctly",
     "ERR_NAME_REQUIRED": "Name is required",
+    "ERR_ROLE_REQUIRED": "User Type is required",
     "ERR_RE_PASSWORD_REQUIRED": "Retype Password is required",
     "ERR_PASSWORDS_MATCH": "Both Passwords must match",
     "ERR_NEW_PASSWORD_REQUIRED": "New Password is required",

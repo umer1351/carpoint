@@ -15,6 +15,25 @@
                     <div class="table-responsive">
                         <table class="table table-bordered">
                             <tr>
+                                <td>{{ BADGE }}</td>
+                                <td>
+                                @if($customer_detail->badges->count())
+    
+                                    @foreach($customer_detail->badges as $badge)
+                                        <li class="list-inline-item">
+                                            <img src="{{ asset('uploads/badges/'.$badge->icon) }}" alt="{{ $badge->name }}" width="40" class="rounded-circle">
+                                            <span class="badge badge-primary">{{ $badge->name }}</span>
+                                        </li>
+                                    @endforeach
+                                        
+                                @else
+                                    <p>No badges assigned.</p>
+                                @endif
+
+                                </td>
+                            </tr>
+
+                            <tr>
                                 <td>{{ PHOTO }}</td>
                                 <td>
                                      @if($customer_detail->photo == '')
@@ -104,4 +123,54 @@
             </div>
         </div>
     </div>
+    <div class="card mt-3">
+    <div class="card-header">
+        <h5>Assign Badge</h5>
+    </div>
+    <div class="card-body">
+        <form action="{{ route('admin_assign_badge', $customer_detail->id) }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label for="badge_id">Select Badge:</label>
+                <select name="badge_id" class="form-control">
+                    @if($badges->count() > 0)
+                        @foreach($badges as $badge)
+                            <option value="{{ $badge->id }}">{{ $badge->name }}</option>
+                        @endforeach
+                    @else
+                        <option disabled>No badges available</option>
+                    @endif
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Assign Badge</button>
+        </form>
+    </div>
+    <!-- <table class="table">
+    <thead>
+        <tr>
+            <th>Badge</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($customer_detail->badges as $badge)
+        <tr>
+            <td>
+                <img src="{{ asset('uploads/badges/'.$badge->icon) }}" class="w_40"> 
+                {{ $badge->name }}
+            </td>
+            <td>
+                <form action="{{ route('admin_customers_remove_badge', $customer_detail->id) }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="badge_id" value="{{ $badge->id }}">
+                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                </form>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table> -->
+
+</div>
+
 @endsection

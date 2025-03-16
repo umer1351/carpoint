@@ -80,21 +80,21 @@ a:hover {
 }
 
 .dashboard-box-1 {
-    background: #007bff;
+    background: #ff9c2e;
 }
 
 .dashboard-box-2 {
-    background: #28a745;
+    background: #ff9c2e;
 }
 
 .dashboard-box-3 {
-    background: #eaeaea;
+    background: #ff9c2e;
     color: #333;
 }
 
 .dashboard-box-3 table,
 .dashboard-box-3 table tr td {
-    border: 1px solid #b1b1b1;
+    border: 1px solid #ff9c2e;
 }
 
 .contact-page-map iframe {
@@ -2161,12 +2161,12 @@ h4.contact-form-title {
 }
 
 .user-sidebar ul li a {
-    background: #7b7c7d!important;
+    background: #ff9c2e!important;
     border: 0;
 }
 
 .user-sidebar ul li a:hover {
-    background: #333!important;
+    background: #ff9c2e!important;
 }
 
 .modal-table {

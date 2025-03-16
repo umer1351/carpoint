@@ -37,6 +37,17 @@
 								<input type="email" class="form-control" name="email">
 							</div>
 							<div class="form-group">
+								<label for="">{{ USER_ROLE }}</label>
+								<div class="form-group">
+									<input type="radio" id="buyer" class="w_100" name="user_role" value="buyer" required>
+									<label for="buyer">{{ BUYER }}</label>
+								</div>
+								<div class="form-group">
+									<input type="radio" id="seller" class="w_100" name="user_role" value="seller">
+									<label for="seller">{{ SELLER }}</label>
+								</div>
+							</div>
+							<div class="form-group">
 								<label for="">{{ PASSWORD }}</label>
 								<input type="password" class="form-control" name="password">
 							</div>

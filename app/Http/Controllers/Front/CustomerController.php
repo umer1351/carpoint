@@ -5,6 +5,7 @@ use App\Models\LanguageMenuText;
 use App\Models\LanguageWebsiteText;
 use App\Models\LanguageNotificationText;
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Wishlist;
 use App\Models\Amenity;
 use App\Models\Listing;
@@ -1476,5 +1477,32 @@ class CustomerController extends Controller
             return Redirect()->back()->with('error', ERR_PAYMENT_FAILED);
         }
     }
+
+    public function requestToBuy($listing_id)
+    {
+        $listing = Listing::findOrFail($listing_id);
+
+        if ($listing->is_sold) {
+            return redirect()->back()->with('error', 'This listing is already sold.');
+        }
+
+        $seller_id = $listing->user_id; // Seller is the one who created the listing
+
+        // Ensure seller_id is valid
+        if (!$seller_id) {
+            return back()->with('error', 'Seller information is missing.');
+        }
+
+        Order::create([
+            'listing_id' => $listing->id,
+            'buyer_id' => auth()->id(),
+            'seller_id' => $listing->user_id,
+            'status' => 'pending',
+            'payment_status' => 'pending',
+        ]);
+
+        return redirect()->back()->with('success', 'Your purchase request has been sent.');
+    }
+
 
 }

@@ -770,7 +770,48 @@
 			</div>
 			<div class="col-lg-4 col-md-12 col-sm-12">
 				<div class="listing-sidebar" id="sticky_sidebar">
+					@if($is_sold)
+						<span class="badge bg-danger">Sold</span>
+					@elseif($order_status === 'pending')
+						<span class="badge bg-warning">Purchase Pending</span>
+					
+					@elseif($order_status == 'approved' && $payment_status == 'pending')
+					@if($g_setting->stripe_status == 'Show')
+                                <tr>
+                                    <td>{{ PAY_WITH_STRIPE }}</td>
+                                    <td>
+									@php
+                                       $final_price = (float) $detail->listing_price; // Pehle isko float me convert karna zaroori hai
+                                       $final_price = $final_price * session()->get('currency_value'); // Ab multiply hoga
+                                       $final_price = round($final_price, 2); // 2 decimal places tak round karega
+                                       $cents = $final_price * 100; // Stripe ke liye cents me convert
+                                       $customer_email = session()->get('email');
+                                    @endphp
 
+                                        <form action="{{ route('order_payment_stripe') }}" method="post">
+                                            @csrf
+                                            <script
+                                                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                                data-key="{{ $g_setting->stripe_public_key }}"
+                                                data-amount="{{ $cents }}"
+                                                data-name="{{ env('APP_NAME') }}"
+                                                data-description=""
+                                                data-image="{{ asset('public/images/stripe_icon.png') }}"
+                                                data-currency="{{ session()->get('currency_name') }}"
+                                                data-email="{{ $customer_email }}"
+                                            >
+                                            </script>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endif
+					@elseif(Auth::check() && Auth::id() != $detail->user_id)
+						<form action="{{ route('request.buy', $detail->id) }}" method="POST">
+							@csrf
+							<button type="submit" class="btn btn-primary btn-block agent-view-profile">Request to Buy</button>
+						</form>
+					@endif
+					</br>
 					<div class="ls-widget">
 						<h2>{{ AGENT }}</h2>
 						<div class="agent">

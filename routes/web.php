@@ -1,5 +1,6 @@
 <?php
 use App\Http\Controllers\Admin\CommentController;
+use App\Http\Controllers\Admin\AdminOrdersController;
 use App\Http\Controllers\Admin\HomeAdvertisementController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\CustomerController as CustomerControllerForAdmin;
@@ -35,6 +36,7 @@ use App\Http\Controllers\Admin\PackageController as PackageControllerForAdmin;
 use App\Http\Controllers\Admin\PurchaseHistoryController as PurchaseHistoryControllerForAdmin;
 use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\ClearDatabaseController;
+use App\Http\Controllers\Admin\BadgeController;
 
 use App\Http\Controllers\Front\CurrencyController as CurrencyControllerForFront;
 use App\Http\Controllers\Front\AboutController;
@@ -61,6 +63,7 @@ Route::group(['middleware' => ['XSS']], function () {
 /* Front End */
 /* --------------------------------------- */
 Route::get('/', [HomeController::class,'index']);
+
 
 Route::post('currency', [CurrencyControllerForFront::class,'index'])
     ->name('front_currency');
@@ -174,6 +177,17 @@ Route::get('customer/reset-password/{token}/{email}', [CustomerAuthController::c
 Route::post('customer/reset-password/update', [CustomerAuthController::class,'reset_password_update'])
     ->name('customer_reset_password_update');
 
+/* --------------------------------------- */
+/* Order */
+/* --------------------------------------- */
+
+Route::post('/request-to-buy/{id}', [CustomerControllerForFront::class, 'requestToBuy'])->name('request.buy');
+
+
+Route::get('/admin/orders', [AdminOrdersController::class, 'index'])->name('admin_orders');
+Route::post('/admin/orders/{order}/approve', [AdminOrdersController::class, 'approve'])->name('admin_orders_approve');
+Route::post('/admin/orders/{order}/reject', [AdminOrdersController::class, 'reject'])->name('admin_orders_reject');
+
 
 
 /* --------------------------------------- */
@@ -193,6 +207,7 @@ Route::get('customer/package/paid/buy/{id}', [CustomerControllerForFront::class,
 
 
 Route::post('customer/payment/stripe', [CustomerControllerForFront::class,'stripe'])->name('customer_payment_stripe');
+Route::post('customer/payment/stripe', [CustomerControllerForFront::class,'stripe'])->name('order_payment_stripe');
 Route::get('customer/payment/paypal', [CustomerControllerForFront::class,'paypal']);
 Route::post('customer/payment/razorpay',[CustomerControllerForFront::class,'razorpay'])->name('customer_payment_razorpay');
 Route::post('customer/payment/flutterwave',[CustomerControllerForFront::class,'flutterwave'])->name('customer_payment_flutterwave');
@@ -837,5 +852,38 @@ Route::get('admin/customer/delete/{id}', [CustomerControllerForAdmin::class,'des
     ->name('admin_customer_delete');
 
 Route::get('admin/customer-status/{id}', [CustomerControllerForAdmin::class,'change_status']);
+
+Route::post('admin/customer/{id}/assign-badge', [CustomerControllerForAdmin::class, 'assignBadge'])
+    ->name('admin_assign_badge');
+
+Route::post('/admin/customers/{id}/remove-badge', [CustomerControllerForAdmin::class, 'removeBadge'])->name('admin_customers_remove_badge');
+
+Route::get('seller-listings/{id}', [CustomerControllerForAdmin::class, 'sellerListings'])->name('admin_seller_listings');
+
+
+/* --------------------------------------- */
+/* Badges- Admin */
+/* --------------------------------------- */
+
+Route::get('admin/badges/view', [BadgeController::class, 'index'])
+    ->name('admin_badges_view');
+
+Route::get('admin/badges/create', [BadgeController::class, 'create'])
+    ->name('admin_badges_create');
+
+Route::post('admin/badges/store', [BadgeController::class, 'store'])
+    ->name('admin_badges_store');
+
+Route::get('admin/badges/edit/{id}', [BadgeController::class, 'edit'])
+    ->name('admin_badges_edit');
+
+Route::post('admin/badges/update/{id}', [BadgeController::class, 'update'])
+    ->name('admin_badges_update');
+
+Route::get('admin/badges/delete/{id}', [BadgeController::class, 'destroy'])
+    ->name('admin_badges_delete');
+
+Route::get('admin/badge-status/{id}', [BadgeController::class,'change_status']);
+
 
 });

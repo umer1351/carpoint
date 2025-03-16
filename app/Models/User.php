@@ -24,6 +24,7 @@ class User extends Authenticatable
         'photo',
         'banner',
         'password',
+        'user_role',
         'token',
         'status'
     ];
@@ -31,5 +32,20 @@ class User extends Authenticatable
     public function rPurchasePackage()
     {
         return $this->hasMany(PackagePurchase::class, 'user_id', 'id');
+    }
+
+    public function isSeller()
+    {
+        return $this->user_role === 'seller';
+    }
+
+    public function isBuyer()
+    {
+        return $this->user_role === 'buyer';
+    }
+
+    public function badges()
+    {
+        return $this->belongsToMany(Badge::class, 'user_badges_pivot')->withTimestamps();
     }
 }

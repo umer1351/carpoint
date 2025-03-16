@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Badge;
 use App\Models\Listing;
 use App\Models\PackagePurchase;
 use App\Models\Review;
@@ -23,8 +24,15 @@ class CustomerController extends Controller
     }
 
     public function detail($id) {
-        $customer_detail = User::where('id',$id)->first();
-        return view('admin.customer_detail', compact('customer_detail'));
+        $customer_detail = User::with('badges')->where('id', $id)->first();
+         // Already assigned badge IDs
+        $assigned_badge_ids = $customer_detail->badges->pluck('id')->toArray();
+        
+        // Fetch only those badges that are NOT assigned
+        $badges = Badge::whereNotIn('id', $assigned_badge_ids)->get();
+        $customer_detail = User::with('badges')->where('id',$id)->first();
+        
+        return view('admin.customer_detail', compact('customer_detail', 'badges'));
     }
 
     public function destroy($id) {
@@ -74,4 +82,38 @@ class CustomerController extends Controller
         }
         return response()->json($message);
     }
+
+    public function assignBadge(Request $request, $id) {
+        $request->validate([
+            'badge_id' => 'required|exists:badges,id'
+        ]);
+    
+        $customer = User::findOrFail($id);
+        $customer->badges()->syncWithoutDetaching([$request->badge_id]); // Assign badge without removing existing ones
+    
+        return redirect()->back()->with('success', 'Badge assigned successfully!');
+    }
+
+    public function removeBadge(Request $request, $id)
+    {
+        $customer = User::findOrFail($id);
+        
+        // Badge ko user se detach karna
+        $customer->badges()->detach($request->badge_id);
+
+        return redirect()->back()->with('success', 'Badge removed successfully!');
+    }
+
+    public function sellerListings($id) {
+        $seller = User::findOrFail($id);
+    
+        // Seller ki sari listings aur sold count
+        $listings = Listing::where('user_id', $id)
+            ->withCount(['orders as sold_count']) // Sold items count
+            ->get();
+    
+        return view('admin.seller_listings', compact('seller', 'listings'));
+    }
+    
+
 }

@@ -22,9 +22,25 @@
 				</div>
 			</div>
 			<div class="col-md-9">
-
+	
 				<form action="{{ route('customer_update_profile_confirm') }}" method="post">
                     @csrf
+					<div class="row">
+						<div class="col-md-12">
+							<div class="card">
+								<div class="form-group">
+									<div class="card-header">
+										<h5>Badge Earned</h5>
+									</div>
+									<div class="card-body">
+										@foreach(auth()->user()->badges as $badge)
+											<img src="{{ asset('uploads/badges/'.$badge->icon) }}" class="w_40" title="{{ $badge->name }}">
+										@endforeach
+									</div>
+								</div>	
+							</div>
+						</div>
+					</div>		
 					<div class="row">
 						<div class="col-md-6">
 							<div class="form-group">

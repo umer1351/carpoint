@@ -88,14 +88,16 @@ class CustomerAuthController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required',
-            're_password' => 'required|same:password'
+            're_password' => 'required|same:password',
+            'user_role' => 'required'
         ], [
             'name.required' => ERR_NAME_REQUIRED,
             'email.required' => ERR_EMAIL_REQUIRED,
             'email.email' => ERR_EMAIL_INVALID,
             'password.required' => ERR_PASSWORD_REQUIRED,
             're_password.required' => ERR_RE_PASSWORD_REQUIRED,
-            're_password.same' => ERR_PASSWORDS_MATCH
+            're_password.same' => ERR_PASSWORDS_MATCH,
+            'user_role.required' => ERR_ROLE_REQUIRED
         ]);
 
         if($g_setting->google_recaptcha_status == 'Show') {

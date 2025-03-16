@@ -20,6 +20,7 @@ use App\Models\PageListingLocationItem;
 use App\Models\Review;
 use App\Models\Wishlist;
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Admin;
 use Illuminate\Http\Request;
 use DB;
@@ -102,6 +103,19 @@ class ListingController extends Controller
         if(Auth::user()) {
             $current_auth_user_id = Auth::user()->id;
         }
+        
+
+        // Check if user has already placed an order
+        $existing_order = Order::where('listing_id', $detail->id)
+            ->where('buyer_id', $current_auth_user_id)
+            ->first();
+
+        $order_status = $existing_order ? $existing_order->status : null;
+        $payment_status = $existing_order ? $existing_order->payment_status : null;
+        // Check if listing is sold
+        $is_sold = Order::where('listing_id', $detail->id)
+            ->where('status', 'completed')
+            ->exists();
 
         // If he already given review for this item
         $already_given = 0;
@@ -112,7 +126,7 @@ class ListingController extends Controller
 
         $all_amenities = Amenity::orderBy('id', 'asc')->get();
 
-    	return view('front.listing_detail', compact('detail','g_setting','listing_social_items','listing_photos','listing_videos','listing_amenities','listing_additional_features','listing_brands','listing_locations','agent_detail','reviews','current_auth_user_id', 'already_given', 'overall_rating','all_amenities'));
+    	return view('front.listing_detail', compact('payment_status','order_status', 'is_sold','detail','g_setting','listing_social_items','listing_photos','listing_videos','listing_amenities','listing_additional_features','listing_brands','listing_locations','agent_detail','reviews','current_auth_user_id', 'already_given', 'overall_rating','all_amenities'));
     }
 
     public function brand_all()
