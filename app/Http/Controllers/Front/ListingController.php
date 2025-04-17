@@ -112,6 +112,8 @@ class ListingController extends Controller
 
         $order_status = $existing_order ? $existing_order->status : null;
         $payment_status = $existing_order ? $existing_order->payment_status : null;
+
+        $order_id = $existing_order ? $existing_order->id : null;
         // Check if listing is sold
         $is_sold = Order::where('listing_id', $detail->id)
             ->where('status', 'completed')
@@ -126,7 +128,7 @@ class ListingController extends Controller
 
         $all_amenities = Amenity::orderBy('id', 'asc')->get();
 
-    	return view('front.listing_detail', compact('payment_status','order_status', 'is_sold','detail','g_setting','listing_social_items','listing_photos','listing_videos','listing_amenities','listing_additional_features','listing_brands','listing_locations','agent_detail','reviews','current_auth_user_id', 'already_given', 'overall_rating','all_amenities'));
+    	return view('front.listing_detail', compact('order_id','payment_status','order_status', 'is_sold','detail','g_setting','listing_social_items','listing_photos','listing_videos','listing_amenities','listing_additional_features','listing_brands','listing_locations','agent_detail','reviews','current_auth_user_id', 'already_given', 'overall_rating','all_amenities'));
     }
 
     public function brand_all()
@@ -380,8 +382,14 @@ class ListingController extends Controller
             }
         }
 
-        if($request->text){
-            $listings = $listings->where('listing_name', 'LIKE', '%'.$request->text.'%');
+        if ($request->text) {
+            $listings = $listings->where(function ($query) use ($request) {
+                $query->where('listing_name', 'LIKE', '%'.$request->text.'%')
+                      ->orWhere('listing_engine_capacity', 'LIKE', '%'.$request->text.'%')
+                      ->orWhere('listing_mileage', 'LIKE', '%'.$request->text.'%')
+                      ->orWhere('listing_fuel_type', 'LIKE', '%'.$request->text.'%')
+                      ->orWhere('listing_transmission', 'LIKE', '%'.$request->text.'%');
+            });
         }
         $listings = $listings->where('listing_status','Active');
         $listings = $listings->paginate(20);
@@ -402,11 +410,6 @@ class ListingController extends Controller
             'name' => 'required',
             'email' => 'required|email',
             'message' => 'required'
-        ], [
-            'name.required' => ERR_NAME_RREQUIRED,
-            'email.required' => ERR_EMAIL_REQUIRED,
-            'email.email' => ERR_EMAIL_INVALID,
-            'message.required' => ERR_MESSAGE_REQUIRED
         ]);
 
         if($g_setting->google_recaptcha_status == 'Show') {

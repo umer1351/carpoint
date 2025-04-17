@@ -1,5 +1,13 @@
 <?php
+use Kreait\Firebase\Factory;
+
+
 use App\Http\Controllers\Admin\CommentController;
+use App\Http\Controllers\GarageController;
+use App\Http\Controllers\MessageController;
+use App\Http\Controllers\FinanceInquiryController;
+use App\Http\Controllers\InspectionRequestController;
+use App\Http\Controllers\AdminMessageController;
 use App\Http\Controllers\Admin\AdminOrdersController;
 use App\Http\Controllers\Admin\HomeAdvertisementController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -63,6 +71,9 @@ Route::group(['middleware' => ['XSS']], function () {
 /* Front End */
 /* --------------------------------------- */
 Route::get('/', [HomeController::class,'index']);
+
+// Route::get('/customer-otp-verify', [CustomerAuthController::class, 'showOtpVerification'])->name('customer_otp_verify');
+Route::post('/customer-otp-verify', [CustomerControllerForFront::class, 'verifyOtp'])->name('customer_otp_verify');;
 
 
 Route::post('currency', [CurrencyControllerForFront::class,'index'])
@@ -144,6 +155,37 @@ Route::get('search-listing-result', [ListingControllerForFront::class,'search_li
 Route::get('customer/wishlist/add/{id}', [ListingControllerForFront::class,'wishlist_add'])
     ->name('front_add_wishlist');
 
+Route::middleware(['auth'])->group(function () {
+    Route::post('/inspection/request/{listingId}', [InspectionRequestController::class, 'requestInspection'])->name('inspection.request');
+
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/seller/inspections', [InspectionRequestController::class, 'sellerRequests'])->name('seller_inspections');
+        Route::post('/inspection/{id}/{status}', [InspectionRequestController::class, 'updateStatus'])->name('inspection.update');
+    });
+});
+    
+Route::middleware(['auth'])->group(function () {
+    Route::post('/finance/inquiry/{listingId}', [FinanceInquiryController::class, 'submitInquiry'])->name('finance.inquiry.submit');
+});
+
+
+    Route::get('/admin/finance-inquiries', [FinanceInquiryController::class, 'adminInquiries'])->name('admin_finance_inquiries');
+
+
+// Message
+Route::middleware(['auth'])->group(function () {
+    Route::post('/messages/send', [MessageController::class, 'sendMessage'])->name('messages.send');
+    Route::get('/messages/inbox', [MessageController::class, 'inbox'])->name('messages.inbox');
+    Route::post('/messages/reply/{messageId}', [MessageController::class, 'replyMessage'])->name('messages.reply');
+});
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/garages', [GarageController::class, 'index'])->name('garages_index');
+    Route::get('/garages/create', [GarageController::class, 'create'])->name('garages_create');
+    Route::post('/garages', [GarageController::class, 'store'])->name('garages.store');
+    Route::post('/garages/{garageId}/services', [GarageController::class, 'addService'])->name('garages.addService');
+});
+
 
 
 /* --------------------------------------- */
@@ -196,6 +238,9 @@ Route::post('/admin/orders/{order}/reject', [AdminOrdersController::class, 'reje
 Route::get('customer/dashboard', [CustomerControllerForFront::class,'dashboard'])
     ->name('customer_dashboard');
 
+Route::get('customer/otp', [CustomerControllerForFront::class,'otp'])
+    ->name('customer_otp');
+
 Route::get('customer/package', [CustomerControllerForFront::class,'package'])
     ->name('customer_package');
 
@@ -208,6 +253,7 @@ Route::get('customer/package/paid/buy/{id}', [CustomerControllerForFront::class,
 
 Route::post('customer/payment/stripe', [CustomerControllerForFront::class,'stripe'])->name('customer_payment_stripe');
 Route::post('customer/payment/stripe', [CustomerControllerForFront::class,'stripe'])->name('order_payment_stripe');
+Route::post('customer/payment/stripe', [CustomerControllerForFront::class,'stripe_inspection'])->name('inspection_payment_stripe');
 Route::get('customer/payment/paypal', [CustomerControllerForFront::class,'paypal']);
 Route::post('customer/payment/razorpay',[CustomerControllerForFront::class,'razorpay'])->name('customer_payment_razorpay');
 Route::post('customer/payment/flutterwave',[CustomerControllerForFront::class,'flutterwave'])->name('customer_payment_flutterwave');
@@ -315,6 +361,11 @@ Route::post('customer/review', [CustomerControllerForFront::class,'submit_review
 /* --------------------------------------- */
 /* Login and profile management */
 /* --------------------------------------- */
+
+    Route::get('/admin/messages', [AdminMessageController::class, 'index'])->name('admin.messages.index');
+    Route::get('/admin/messages/{senderId}/{receiverId}', [AdminMessageController::class, 'conversation'])->name('admin.messages.conversation');
+
+
 Route::get('admin/dashboard', [DashboardControllerForAdmin::class,'index'])
     ->name('admin_dashboard');
 

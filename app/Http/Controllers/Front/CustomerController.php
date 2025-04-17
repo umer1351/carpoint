@@ -6,6 +6,7 @@ use App\Models\LanguageWebsiteText;
 use App\Models\LanguageNotificationText;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\InspectionRequest;
 use App\Models\Wishlist;
 use App\Models\Amenity;
 use App\Models\Listing;
@@ -37,7 +38,7 @@ use PayPal\Api\PaymentExecution;
 use PayPal\Api\Transaction;
 use Razorpay\Api\Api;
 use Mollie\Laravel\Facades\Mollie;
-
+use Session;
 class CustomerController extends Controller
 {
 	public function __construct() {
@@ -65,6 +66,46 @@ class CustomerController extends Controller
             ->first();
 
         return view('front.customer_dashboard', compact('g_setting','total_active_listing','total_pending_listing','detail','page_other_item'));
+    }
+
+    public function otp() 
+    {
+        $page_other_item = PageOtherItem::where('id',1)->first();
+
+        $g_setting = GeneralSetting::where('id', 1)->first();
+        
+
+        return view('front.customer_otp_verify', compact('g_setting','page_other_item'));
+    }
+
+    public function verifyOtp(Request $request) 
+    {
+        $page_other_item = PageOtherItem::where('id',1)->first();
+
+        $g_setting = GeneralSetting::where('id', 1)->first();
+        $request->validate(['otp' => 'required']);
+
+        $authUserId = Session::get('auth_user_id');
+        $sessionOtp = Session::get('auth_otp');
+
+        if (!$authUserId || !$sessionOtp) {
+           
+            return redirect()->route('customer_login')->with('error', 'Session expired, please login again.');
+        }
+        if ($request->otp == $sessionOtp) {
+            Auth::loginUsingId($authUserId);
+            Session::forget(['auth_otp']); // ✅ Remove OTP from session
+            Session::put('otp_verified', true); // ✅ Mark OTP as verified
+    
+            return redirect()->route('customer_dashboard');
+           
+        } else {
+            return redirect()->back()->with('error', 'Invalid OTP.');
+          
+        }
+        // dd($request->otp);
+
+        // return view('front.customer_otp_verify', compact('g_setting','page_other_item'));
     }
 
     public function update_profile() 
@@ -1115,95 +1156,280 @@ class CustomerController extends Controller
         }
     }
 
-    public function stripe()
+    // public function stripe()
+    // {
+    //     if(!session()->get('package_id')) {
+    //         return redirect()->to('/');
+    //     }
+
+    //     $user_data = Auth::user();
+    //     $g_setting = GeneralSetting::where('id', 1)->first();
+    //     $stripe_secret_key = $g_setting->stripe_secret_key;
+
+    //     $admin_amount = session()->get('package_price');
+    //     $final_price = $admin_amount*session()->get('currency_value');
+    //     $final_price = round($final_price,2);
+
+    //     \Stripe\Stripe::setApiKey($stripe_secret_key);
+
+    //     if(isset($_POST['stripeToken']))
+    //     {
+    //         \Stripe\Stripe::setVerifySslCerts(false);
+
+    //         $token = $_POST['stripeToken'];
+    //         $response = \Stripe\Charge::create([
+    //             'amount' => $final_price*100,
+    //             'currency' => session()->get('currency_name'),
+    //             'description' => 'Stripe Payment',
+    //             'source' => $token,
+    //             'metadata' => ['order_id' => uniqid()],
+    //         ]);
+
+    //         $bal = \Stripe\BalanceTransaction::retrieve($response->balance_transaction);
+    //         $balJson = $bal->jsonSerialize();
+
+    //         if(env('PROJECT_MODE') == 0) {
+    //             return Redirect()->route('customer_package_purchase_history')->with('error', env('PROJECT_NOTIFICATION'));
+    //         } else {
+    //             $paid_amount = $balJson['amount']/100;
+
+    //             // Make all other previous packages status to 0 and this package status 1
+    //             $data['currently_active'] = 0;
+    //             PackagePurchase::where('user_id',$user_data->id)->update($data);
+    
+    //             // Selected Package Detail
+    //             $package_detail = Package::where('id',session()->get('package_id'))->first();
+    //             $valid_days = $package_detail->valid_days;
+    //             $start_date = date('Y-m-d');
+    //             $end_date = date('Y-m-d', strtotime("+$valid_days days"));    
+    
+    //             $obj = new PackagePurchase;
+    //             $obj->user_id = $user_data->id;
+    //             $obj->package_id = session()->get('package_id');
+    //             $obj->transaction_id = $response->balance_transaction;
+    //             $obj->paid_amount = $final_price;
+    //             $obj->paid_currency = session()->get('currency_name');
+    //             $obj->paid_currency_symbol = session()->get('currency_symbol');
+    //             $obj->admin_amount = $admin_amount;
+    //             $obj->payment_method = 'Stripe';
+    //             $obj->payment_status = 'Completed';
+    //             $obj->package_start_date = $start_date;
+    //             $obj->package_end_date = $end_date;
+    //             $obj->currently_active = 1;
+    //             $obj->save();
+    
+    //             // Send Email To Customer
+    //             $payment_method = 'Stripe';
+    
+    //             $et_data = EmailTemplate::where('id', 8)->first();
+    //             $subject = $et_data->et_subject;
+    //             $message = $et_data->et_content;
+    
+    //             $message = str_replace('[[customer_name]]', $user_data->name, $message);
+    //             $message = str_replace('[[transaction_id]]', $response->balance_transaction, $message);
+    //             $message = str_replace('[[payment_method]]', $payment_method, $message);
+    //             $message = str_replace('[[paid_amount]]', session()->get('currency_symbol').$paid_amount, $message);
+    //             $message = str_replace('[[payment_status]]', 'Completed', $message);
+    //             $message = str_replace('[[package_start_date]]', $start_date, $message);
+    //             $message = str_replace('[[package_end_date]]', $end_date, $message);
+    //             Mail::to($user_data->email)->send(new PurchaseCompletedEmailToCustomer($subject,$message));
+    
+    //             session()->forget('package_id');
+    //             session()->forget('package_name');
+    //             session()->forget('package_price');
+
+    //             return Redirect()->route('customer_package_purchase_history')->with('success', SUCCESS_PACKAGE_PURCHASE);
+    //         }
+            
+    //     }
+
+    // }
+    public function stripe(Request $request)
     {
-        if(!session()->get('package_id')) {
-            return redirect()->to('/');
-        }
+        // if (!session()->get('package_id') && !session()->get('listing_id')) {
+        //     return redirect()->to('/');
+        // }
 
         $user_data = Auth::user();
         $g_setting = GeneralSetting::where('id', 1)->first();
         $stripe_secret_key = $g_setting->stripe_secret_key;
 
-        $admin_amount = session()->get('package_price');
-        $final_price = $admin_amount*session()->get('currency_value');
-        $final_price = round($final_price,2);
-
+        $payment_type = $request->input('payment_type'); // package ya listing
+       
+        if ($payment_type == 'package') {
+            $admin_amount = session()->get('package_price');
+        } elseif ($payment_type == 'listing') {
+            $admin_amount = $request->input('final_price');
+        } else {
+            return redirect()->back()->with('error', 'Invalid payment type.');
+        }
+        
+        $final_price =(int) $admin_amount;
+        
+        
         \Stripe\Stripe::setApiKey($stripe_secret_key);
 
-        if(isset($_POST['stripeToken']))
-        {
+        if (isset($_POST['stripeToken'])) {
             \Stripe\Stripe::setVerifySslCerts(false);
 
             $token = $_POST['stripeToken'];
             $response = \Stripe\Charge::create([
-                'amount' => $final_price*100,
+                'amount' => $final_price,
                 'currency' => session()->get('currency_name'),
-                'description' => 'Stripe Payment',
+                'description' => ucfirst($payment_type) . ' Payment',
                 'source' => $token,
                 'metadata' => ['order_id' => uniqid()],
             ]);
-
+            
             $bal = \Stripe\BalanceTransaction::retrieve($response->balance_transaction);
             $balJson = $bal->jsonSerialize();
 
-            if(env('PROJECT_MODE') == 0) {
+            if (env('PROJECT_MODE') == 0) {
                 return Redirect()->route('customer_package_purchase_history')->with('error', env('PROJECT_NOTIFICATION'));
             } else {
-                $paid_amount = $balJson['amount']/100;
+                $paid_amount = $balJson['amount'];
 
-                // Make all other previous packages status to 0 and this package status 1
-                $data['currently_active'] = 0;
-                PackagePurchase::where('user_id',$user_data->id)->update($data);
-    
-                // Selected Package Detail
-                $package_detail = Package::where('id',session()->get('package_id'))->first();
-                $valid_days = $package_detail->valid_days;
-                $start_date = date('Y-m-d');
-                $end_date = date('Y-m-d', strtotime("+$valid_days days"));    
-    
-                $obj = new PackagePurchase;
-                $obj->user_id = $user_data->id;
-                $obj->package_id = session()->get('package_id');
-                $obj->transaction_id = $response->balance_transaction;
-                $obj->paid_amount = $final_price;
-                $obj->paid_currency = session()->get('currency_name');
-                $obj->paid_currency_symbol = session()->get('currency_symbol');
-                $obj->admin_amount = $admin_amount;
-                $obj->payment_method = 'Stripe';
-                $obj->payment_status = 'Completed';
-                $obj->package_start_date = $start_date;
-                $obj->package_end_date = $end_date;
-                $obj->currently_active = 1;
-                $obj->save();
-    
-                // Send Email To Customer
-                $payment_method = 'Stripe';
-    
+                if ($payment_type == 'package') {
+                    // Make all other previous packages inactive
+                    PackagePurchase::where('user_id', $user_data->id)->update(['currently_active' => 0]);
+
+                    $package_detail = Package::where('id', session()->get('package_id'))->first();
+                    $valid_days = $package_detail->valid_days;
+                    $start_date = date('Y-m-d');
+                    $end_date = date('Y-m-d', strtotime("+$valid_days days"));
+
+                    $obj = new PackagePurchase();
+                    $obj->user_id = $user_data->id;
+                    $obj->package_id = session()->get('package_id');
+                    $obj->package_start_date = $start_date;
+                    $obj->package_end_date = $end_date;
+                    $obj->currently_active = 1;
+                    $obj->transaction_id = $response->balance_transaction;
+                    $obj->paid_amount = $final_price/100;
+                    $obj->paid_currency = session()->get('currency_name');
+                    $obj->paid_currency_symbol = session()->get('currency_symbol');
+                    $obj->admin_amount = $admin_amount;
+                    $obj->payment_method = 'Stripe';
+                    $obj->payment_status = 'Completed';
+                    $obj->save();
+                } else {
+                    $obj = new Listing();
+                    $obj->id = $request->input('listing_id');;
+                    $order_id = $request->input('order_id');
+                    Order::where('id', $order_id)->update([
+                        'payment_status' => 'Paid',
+                        'paid_amount' => $final_price/100,
+                        'paid_currency' => session()->get('currency_name'),
+                        'payment_method' => 'Stripe',
+                    ]);
+                    Listing::where('id', $request->input('listing_id'))->update([
+                        'is_sold' => '1',
+                    ]);
+                }
+
+                
+
+                // Send Email
                 $et_data = EmailTemplate::where('id', 8)->first();
                 $subject = $et_data->et_subject;
                 $message = $et_data->et_content;
-    
+
                 $message = str_replace('[[customer_name]]', $user_data->name, $message);
                 $message = str_replace('[[transaction_id]]', $response->balance_transaction, $message);
-                $message = str_replace('[[payment_method]]', $payment_method, $message);
-                $message = str_replace('[[paid_amount]]', session()->get('currency_symbol').$paid_amount, $message);
+                $message = str_replace('[[payment_method]]', 'Stripe', $message);
+                $message = str_replace('[[paid_amount]]', session()->get('currency_symbol') . $paid_amount, $message);
                 $message = str_replace('[[payment_status]]', 'Completed', $message);
-                $message = str_replace('[[package_start_date]]', $start_date, $message);
-                $message = str_replace('[[package_end_date]]', $end_date, $message);
-                Mail::to($user_data->email)->send(new PurchaseCompletedEmailToCustomer($subject,$message));
-    
-                session()->forget('package_id');
-                session()->forget('package_name');
-                session()->forget('package_price');
+
+                Mail::to($user_data->email)->send(new PurchaseCompletedEmailToCustomer($subject, $message));
+
+                // Forget sessions
+                if ($payment_type == 'package') {
+                    session()->forget('package_id');
+                    session()->forget('package_price');
+                } else {
+                    session()->forget('listing_id');
+                    session()->forget('listing_price');
+                }
 
                 return Redirect()->route('customer_package_purchase_history')->with('success', SUCCESS_PACKAGE_PURCHASE);
             }
-            
         }
-
     }
 
+    public function stripe_inspection(Request $request)
+    {
+        // if (!session()->get('package_id') && !session()->get('listing_id')) {
+        //     return redirect()->to('/');
+        // }
+
+        $user_data = Auth::user();
+        $g_setting = GeneralSetting::where('id', 1)->first();
+        $stripe_secret_key = $g_setting->stripe_secret_key;
+
+        
+        $final_price =200;
+        
+        
+        \Stripe\Stripe::setApiKey($stripe_secret_key);
+
+        if (isset($_POST['stripeToken'])) {
+            \Stripe\Stripe::setVerifySslCerts(false);
+
+            $token = $_POST['stripeToken'];
+            $response = \Stripe\Charge::create([
+                'amount' => $final_price,
+                'currency' => session()->get('currency_name'),
+                'description' =>  'Inspection Payment',
+                'source' => $token,
+                'metadata' => ['order_id' => uniqid()],
+            ]);
+            
+            $bal = \Stripe\BalanceTransaction::retrieve($response->balance_transaction);
+            $balJson = $bal->jsonSerialize();
+
+            if (env('PROJECT_MODE') == 0) {
+                return Redirect()->route('customer_package_purchase_history')->with('error', env('PROJECT_NOTIFICATION'));
+            } else {
+                $paid_amount = $balJson['amount'];
+
+                
+                    
+                
+                    $listing = Listing::findOrFail($request->input('listing_id'));
+
+                    // Check if user is a buyer
+                    if (Auth::user()->user_role !== 'buyer') {
+                        return redirect()->back()->with('error', 'Only buyers can request an inspection.');
+                    }
+            
+                    // Check if request already exists
+                    $exists = InspectionRequest::where('buyer_id', Auth::id())
+                                               ->where('listing_id', $request->input('listing_id'))
+                                               ->where('status', 'Pending')
+                                               ->exists();
+            
+                    if ($exists) {
+                        return redirect()->back()->with('error', 'You have already requested an inspection for this listing.');
+                    }
+            
+                    // Create a new request
+                    InspectionRequest::create([
+                        'buyer_id' => Auth::id(),
+                        'seller_id' => $request->input('seller_id'),
+                        'listing_id' => $request->input('listing_id'),
+                        'status' => 'Accepted'
+                    ]);
+            
+                    return redirect()->back()->with('success', 'Inspection request sent successfully.');
+                
+
+               
+               
+
+                // return Redirect()->route('customer_package_purchase_history')->with('success', SUCCESS_PACKAGE_PURCHASE);
+            }
+        }
+    }
 
     public function razorpay(Request $request)
     {

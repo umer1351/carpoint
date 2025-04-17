@@ -333,9 +333,9 @@ session()->put('currency_value',$value1);
                                 <a href="{{ route('customer_login') }}" class="nav-link"><i class="fas fa-sign-in-alt"></i> {{ MENU_LOGIN_REGISTER }}</a>
                                 @endif
                             </li>
-                            <li class="currency">
+                            <!-- <li class="currency">
                                 <a href="{{ route('customer_listing_add') }}" class="nav-link"><i class="fas fa-plus"></i> {{ MENU_ADD_LISTING }}</a>
-                            </li>                            
+                            </li>                             -->
                         </ul>
                         @endif
                     </div>

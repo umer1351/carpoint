@@ -9,14 +9,16 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "jorenvanhocht/laravel-share": "^4.2",
+        "kreait/firebase-php": "^5.26",
         "laravel/framework": "^8.75",
-        "laravel/sanctum": "^2.11",
+        "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.5",
         "mews/purifier": "^3.3",
         "mollie/laravel-mollie": "^2.19",
         "paypal/rest-api-sdk-php": "^1.14",
         "razorpay/razorpay": "^2.8",
-        "stripe/stripe-php": "^7.116"
+        "stripe/stripe-php": "^7.116",
+        "twilio/sdk": "^8.4"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

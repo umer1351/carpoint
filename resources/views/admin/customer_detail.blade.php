@@ -123,6 +123,48 @@
             </div>
         </div>
     </div>
+        @if($customer_detail->user_role == 'buyer')
+            <h3>Orders Placed</h3>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+                @foreach($orders as $order)
+                <tr>
+                    <td>{{ $order->id }}</td>
+                    <td>{{ $order->paid_amount }} {{ $order->paid_currency }}</td>
+                    <td>{{ $order->payment_status }}</td>
+                    <td>{{ $order->created_at->format('d M Y') }}</td>
+                </tr>
+                @endforeach
+            </table>
+        @endif
+        @if($customer_detail->user_role== 'seller')
+            <h3>Orders Received (As Seller)</h3>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Buyer</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                </tr>
+                @foreach($sellerOrders as $order)
+                <tr>
+                    <td>{{ $order->id }}</td>
+                    <td>{{ $order->buyer->name ?? 'N/A' }}</td>
+                    <td>{{ $order->paid_amount }} {{ $order->paid_currency }}</td>
+                    <td>{{ $order->payment_status }}</td>
+                    <td>{{ $order->created_at->format('d M Y') }}</td>
+                </tr>
+                @endforeach
+            </table>
+        @endif
+
+
     <div class="card mt-3">
     <div class="card-header">
         <h5>Assign Badge</h5>

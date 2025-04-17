@@ -10,7 +10,17 @@ $page_contact_item = \App\Models\PageContactItem::where('id',1)->first();
 $page_listing_location_item = \App\Models\PageListingLocationItem::where('id',1)->first();
 $page_listing_brand_item = \App\Models\PageListingBrandItem::where('id',1)->first();
 @endphp
+<style>
+	@keyframes rotateDrive {
+		0%   { transform: rotate(0deg); }
+		100% { transform: rotate(360deg); }
+		}
 
+		.rotating {
+		animation: rotateDrive 1s linear infinite;
+		}
+
+</style>
 <!-- Start Navbar Area -->
 <div class="navbar-area" id="stickymenu">
 
@@ -19,6 +29,7 @@ $page_listing_brand_item = \App\Models\PageListingBrandItem::where('id',1)->firs
 		<a href="{{ url('/') }}" class="logo">
 			<img src="{{ asset('uploads/site_photos/'.$g_settings->logo) }}" alt="">
 		</a>
+		
 	</div>
 
 	<!-- Menu For Desktop Device -->
@@ -28,6 +39,26 @@ $page_listing_brand_item = \App\Models\PageListingBrandItem::where('id',1)->firs
 				<a class="navbar-brand" href="{{ url('/') }}">
 					<img src="{{ asset('uploads/site_photos/'.$g_settings->logo) }}" alt="">
 				</a>
+				<div id="tyre-toggle" style="display: inline-flex; align-items: center; cursor: pointer; margin-left: 10px;">
+					<div id="tyre-wrapper"
+						class="rotating"
+						style="width: 0.5in; height: 0.5in; background-color: orange; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+						<svg id="tyre" xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="white" viewBox="0 0 24 24">
+						<path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 17.93V19a1 1 0 10-2 0v.93a8.001 8.001 0 01-6.928-6.928H5a1 1 0 100-2h-.93a8.001 8.001 0 016.928-6.928V5a1 1 0 102 0v.07a8.001 8.001 0 016.928 6.928H19a1 1 0 100 2h.93a8.001 8.001 0 01-6.928 6.928z"/>
+						</svg>
+					</div>
+				</div>
+
+					<audio id="engine-sound" loop autoplay>
+					<source src="{{ asset('uploads/sounds/engine-sound.mp3') }}" type="audio/mpeg">
+					Your browser does not support the audio element.
+					</audio>
+
+
+
+
+
+
 				<div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
 					<ul class="navbar-nav {{ $g_settings->layout_direction == 'ltr' ? 'ml-auto' : 'mr-auto' }}">
 
@@ -100,3 +131,34 @@ $page_listing_brand_item = \App\Models\PageListingBrandItem::where('id',1)->firs
 	</div>
 </div>
 <!-- End Navbar Area -->
+
+<script>
+  const tyreWrapper = document.getElementById('tyre-wrapper');
+  const engine = document.getElementById('engine-sound');
+  let isRolling = true;
+
+  // Autoplay when page loads
+  window.addEventListener('DOMContentLoaded', () => {
+    try {
+      engine.play();
+    } catch (err) {
+      // Some browsers block autoplay
+      console.warn('Autoplay failed. User interaction may be needed.');
+    }
+  });
+
+  document.getElementById('tyre-toggle').addEventListener('click', () => {
+    isRolling = !isRolling;
+
+    if (isRolling) {
+      tyreWrapper.classList.add('rotating');
+      engine.play();
+    } else {
+      tyreWrapper.classList.remove('rotating');
+      engine.pause();
+      engine.currentTime = 0;
+    }
+  });
+</script>
+
+

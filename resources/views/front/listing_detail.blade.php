@@ -94,9 +94,55 @@
 					<a href="{{ route('front_add_wishlist',$detail->id) }}">
 						<i class="fas fa-heart"></i> {{ ADD_TO_WISHLIST }}
 					</a>
+					@if(Auth::check() && Auth::user()->user_role === 'buyer')
+					<a href="" data-toggle="modal" data-target="#finance_inquiry">
+						<i class="fas fa-heart"></i> Finance Inquiry
+					</a>
+					@endif
+					<div class="modal fade modal_listing_detail" id="finance_inquiry" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Finance Inquiry</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                
+								<form action="{{ route('finance.inquiry.submit', $detail->id) }}" method="POST">
+										@csrf
+										<div class="mb-3">
+											<label for="term" class="form-label">Select Term</label>
+											<select name="term" class="form-control" required>
+												<option value="1 Year">1 Year</option>
+												<option value="2 Years">2 Years</option>
+												<option value="3 Years">3 Years</option>
+											</select>
+										</div>
+
+										<div class="mb-3">
+											<label for="down_payment" class="form-label">Down Payment (Optional)</label>
+											<input type="number" name="down_payment" class="form-control" placeholder="Enter Down Payment">
+										</div>
+
+										<div class="mb-3">
+											<label for="message" class="form-label">Additional Message</label>
+											<textarea name="message" class="form-control" rows="3" placeholder="Write any additional details..."></textarea>
+										</div>
+
+										<button type="submit" class="btn btn-primary">Submit Inquiry</button>
+									</form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
 					<a href="" data-toggle="modal" data-target="#send_message_modal">
 						<i class="far fa-envelope"></i> {{ SEND_MESSAGE }}
 					</a>
+					
 
                     <!-- Send Message Modal -->
                     <div class="modal fade modal_listing_detail" id="send_message_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -109,7 +155,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="{{ route('front_listing_detail_send_message') }}" method="post">
+                                    <!-- <form action="{{ route('front_listing_detail_send_message') }}" method="post">
                                         @csrf
                                         <input type="hidden" name="listing_name" value="{{ $detail->listing_name }}">
                                         <input type="hidden" name="listing_slug" value="{{ $detail->listing_slug }}">
@@ -149,17 +195,63 @@
                                                 <button type="submit" class="btn btn-success">{{ SEND_MESSAGE }}</button>
                                             </div>
                                         </div>
-                                    </form>
+                                    </form> -->
+									<form action="{{ route('messages.send') }}" method="POST">
+										@csrf
+										<input type="hidden" name="receiver_id" value="{{ $agent_detail->id }}">
+										<input type="hidden" name="listing_id" value="{{ $detail->id }}">
+										<textarea name="message" required placeholder="Type your message here"></textarea>
+										<button type="submit" class="btn btn-primary">Send Message</button>
+									</form>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!-- // Send Message Modal -->
 
+					@if(Auth::check() && Auth::user()->user_role === 'buyer')
+						<!-- <form action="{{ route('inspection.request', $detail->id) }}" method="POST">
+							@csrf
+							<button style="background: white;color: orange;margin-top: 10px;" type="submit" class="btn btn-primary">Request Inspection</button>
+						</form> -->
+						<tr>
+                                    <style>.stripe-button-el span{background-color: white !important; color: orange !important; }.stripe-button-el{width:200px !important; margin-top: 10px !important; background:orange !important;}</style>
+                                    <td ></td>
+									<td>
+									@php
+                                       $final_price = (float) $detail->listing_price; // Pehle isko float me convert karna zaroori hai
+                                       $final_price = $final_price * session()->get('currency_value'); // Ab multiply hoga
+                                       $final_price = 200; // 2 decimal places tak round karega
+                                       $cents = $final_price * 100; // Stripe ke liye cents me convert
+                                       $customer_email = session()->get('email');
+                                    @endphp
+										
+                                        <form action="{{ route('inspection_payment_stripe') }}" method="post">
+                                            @csrf
+											<span style="color: white; font-weight: bold;">Inspection Request</span>
+											<input type="hidden" name="buyer_id" value="{{ $order_id }}" >
+											<input type="hidden" name="seller_id" value="{{ $agent_detail->id }}" >
+											<input type="hidden" name="final_price" value="{{ $cents }}" >
+											<input type="hidden" name="listing_id" value="{{ $detail->id }}">
+                                            <script
+                                                src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                                data-key="{{ $g_setting->stripe_public_key }}"
+                                                data-amount="{{ $cents }}"
+                                                data-name="{{ env('APP_NAME') }}"
+                                                data-description=""
+                                                data-image="{{ asset('public/images/stripe_icon.png') }}"
+                                                data-currency="{{ session()->get('currency_name') }}"
+                                                data-email="{{ $customer_email }}"
+                                            >
+                                            </script>
+                                        </form>
+                                    </td>
+                                </tr>
 
-					<a href="" data-toggle="modal" data-target="#report_modal">
+					@endif
+					<!-- <a href="" data-toggle="modal" data-target="#report_modal">
 						<i class="far fa-flag"></i> {{ REPORT }}
-					</a>
+					</a> -->
 
 
                     <!-- Report Modal -->
@@ -201,6 +293,7 @@
                                                 <textarea name="message" class="form-control h-100" cols="30" rows="10" required></textarea>
                                             </div>
                                         </div>
+										
                                         @if($g_setting->google_recaptcha_status == 'Show')
                                             <div class="form-group">
                                                 <div class="g-recaptcha" data-sitekey="{{ $g_setting->google_recaptcha_site_key }}"></div>
@@ -776,7 +869,7 @@
 						<span class="badge bg-warning">Purchase Pending</span>
 					
 					@elseif($order_status == 'approved' && $payment_status == 'pending')
-					@if($g_setting->stripe_status == 'Show')
+						@if($g_setting->stripe_status == 'Show')
                                 <tr>
                                     <td>{{ PAY_WITH_STRIPE }}</td>
                                     <td>
@@ -790,6 +883,10 @@
 
                                         <form action="{{ route('order_payment_stripe') }}" method="post">
                                             @csrf
+											<input type="hidden" name="payment_type" value="listing">
+											<input type="hidden" name="order_id" value="{{ $order_id }}" >
+											<input type="hidden" name="final_price" value="{{ $cents }}" >
+											<input type="hidden" name="listing_id" value="{{ $detail->id }}">
                                             <script
                                                 src="https://checkout.stripe.com/checkout.js" class="stripe-button"
                                                 data-key="{{ $g_setting->stripe_public_key }}"
@@ -810,6 +907,8 @@
 							@csrf
 							<button type="submit" class="btn btn-primary btn-block agent-view-profile">Request to Buy</button>
 						</form>
+					@elseif($order_status == 'approved' && $payment_status == 'paid')
+						<span class="badge bg-success">Sold</span>	
 					@endif
 					</br>
 					<div class="ls-widget">

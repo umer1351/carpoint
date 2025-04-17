@@ -1,0 +1,939 @@
+{
+    "info": {
+        "name": "API Collection",
+        "schema": "https:\/\/schema.getpostman.com\/json\/collection\/v2.1.0\/collection.json"
+    },
+    "item": [
+        {
+            "name": "Get Profile",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/profile\/profile",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/profile\/profile"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Update Profile",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/profile\/profile-update",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/profile\/profile-update"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "name",
+                            "value": "",
+                            "type": "text"
+                        },
+                        {
+                            "key": "email",
+                            "value": "",
+                            "type": "text"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Password Info",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/profile\/password",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/profile\/password"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Update Password",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/profile\/password-update",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/profile\/password-update"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "password",
+                            "value": "",
+                            "type": "text"
+                        },
+                        {
+                            "key": "re_password",
+                            "value": "",
+                            "type": "text"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Photo Info",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/profile\/photo",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/profile\/photo"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Update Photo",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/profile\/photo-update",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/profile\/photo-update"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "photo",
+                            "value": "",
+                            "type": "text"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Banner Info",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/profile\/banner",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/profile\/banner"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Update Banner",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/profile\/banner-update",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/profile\/banner-update"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "banner",
+                            "value": "",
+                            "type": "text"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Get Listing Detail",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/listing\/detail\/{slug}",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/listing\/detail\/{slug}"
+                    ]
+                },
+                "header": []
+            }
+        },
+        {
+            "name": "Get All Brands",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/listing\/brand-all",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/listing\/brand-all"
+                    ]
+                },
+                "header": []
+            }
+        },
+        {
+            "name": "Get Brand Detail",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/listing\/brand-detail\/{slug}",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/listing\/brand-detail\/{slug}"
+                    ]
+                },
+                "header": []
+            }
+        },
+        {
+            "name": "Get All Locations",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/listing\/location-all",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/listing\/location-all"
+                    ]
+                },
+                "header": []
+            }
+        },
+        {
+            "name": "Get Location Detail",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/listing\/location-detail\/{slug}",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/listing\/location-detail\/{slug}"
+                    ]
+                },
+                "header": []
+            }
+        },
+        {
+            "name": "Get Agent Detail",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/listing\/agent-detail\/{type}\/{id}",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/listing\/agent-detail\/{type}\/{id}"
+                    ]
+                },
+                "header": []
+            }
+        },
+        {
+            "name": "Post Listing Result",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/listing\/listing-result",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/listing\/listing-result"
+                    ]
+                },
+                "header": [],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "search_criteria",
+                            "value": "",
+                            "type": "text"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Request Inspection",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/inspection-request\/{listingId}",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/inspection-request\/{listingId}"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Get Seller Inspection Requests",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/seller\/inspection-requests",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/seller\/inspection-requests"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Update Inspection Status",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/inspection-request\/{id}\/status\/{status}",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/inspection-request\/{id}\/status\/{status}"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Get Home Data",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/home",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/home"
+                    ]
+                },
+                "header": []
+            }
+        },
+        {
+            "name": "Get Garages",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/garages",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/garages"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Store Garage",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/garages",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/garages"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "name",
+                            "value": "",
+                            "type": "text"
+                        },
+                        {
+                            "key": "location",
+                            "value": "",
+                            "type": "text"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Add Service to Garage",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/garages\/{garageId}\/services",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/garages\/{garageId}\/services"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "service_name",
+                            "value": "",
+                            "type": "text"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Submit Finance Inquiry",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/submit-inquiry\/{listingId}",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/submit-inquiry\/{listingId}"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Get Admin Inquiries",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/admin-inquiries",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/admin-inquiries"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Get FAQs",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/faqs",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/faqs"
+                    ]
+                },
+                "header": []
+            }
+        },
+        {
+            "name": "Get Category Detail",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/category\/{slug}",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/category\/{slug}"
+                    ]
+                },
+                "header": []
+            }
+        },
+        {
+            "name": "Get Badges",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/badges",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/badges"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Get Badge Detail",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/badge\/{id}",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/badge\/{id}"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Store Badge",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/badge",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/badge"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "badge_name",
+                            "value": "",
+                            "type": "text"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Update Badge",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/badge\/{id}",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/badge\/{id}"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "badge_name",
+                            "value": "",
+                            "type": "text"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Delete Badge",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/badge\/{id}",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/badge\/{id}"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Change Badge Status",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/badge\/{id}\/status",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/badge\/{id}\/status"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Get Amenities",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/amenities",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/amenities"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Get Amenity Detail",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/amenity\/{id}",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/amenity\/{id}"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Store Amenity",
+            "request": {
+                "method": "POST",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/amenity",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/amenity"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "amenity_name",
+                            "value": "",
+                            "type": "text"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Update Amenity",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/amenity\/{id}",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/amenity\/{id}"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ],
+                "body": {
+                    "mode": "formdata",
+                    "formdata": [
+                        {
+                            "key": "amenity_name",
+                            "value": "",
+                            "type": "text"
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "name": "Delete Amenity",
+            "request": {
+                "method": "DELETE",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/amenity\/{id}",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/amenity\/{id}"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Get Admin Orders",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/admin\/orders",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/admin\/orders"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Approve Admin Order",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/admin\/orders\/{order}\/approve",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/admin\/orders\/{order}\/approve"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Reject Admin Order",
+            "request": {
+                "method": "PUT",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/admin\/orders\/{order}\/reject",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/admin\/orders\/{order}\/reject"
+                    ]
+                },
+                "header": [
+                    {
+                        "key": "Authorization",
+                        "value": "Bearer {token}"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Get Terms and Conditions",
+            "request": {
+                "method": "GET",
+                "url": {
+                    "raw": "https:\/\/listing.kmshopnow.com\/api\/terms-and-conditions",
+                    "host": [
+                        "listing.kmshopnow.com"
+                    ],
+                    "path": [
+                        "\/api\/terms-and-conditions"
+                    ]
+                },
+                "header": []
+            }
+        }
+    ]
+}

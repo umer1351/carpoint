@@ -60,7 +60,7 @@ $page_about_item = \App\Models\PageAboutItem::where('id',1)->first();
                         @endif
 
                         @if($page_term_item->status == 'Show')
-						<li><a href="{{ route('front_terms_and_conditions') }}">{{ MENU_TERMS_AND_CONDITIONS }}</a></li>
+						<li><a target='_blank' href="https://app.termly.io/policy-viewer/policy.html?policyUUID=60bca269-691e-42b5-9869-79345848d08c">{{ MENU_TERMS_AND_CONDITIONS }}</a></li>
                         @endif
 
                         @if($page_blog_item->status == 'Show')

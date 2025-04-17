@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Order;
 use App\Models\Badge;
 use App\Models\Listing;
 use App\Models\PackagePurchase;
@@ -27,12 +28,14 @@ class CustomerController extends Controller
         $customer_detail = User::with('badges')->where('id', $id)->first();
          // Already assigned badge IDs
         $assigned_badge_ids = $customer_detail->badges->pluck('id')->toArray();
-        
+        $orders = Order::where('buyer_id', $id)->get(); // Orders where user is buyer
+        $sellerOrders = Order::where('seller_id', $id)->get();
+        $listings = Listing::where('user_id', $id)->get();
         // Fetch only those badges that are NOT assigned
         $badges = Badge::whereNotIn('id', $assigned_badge_ids)->get();
         $customer_detail = User::with('badges')->where('id',$id)->first();
         
-        return view('admin.customer_detail', compact('customer_detail', 'badges'));
+        return view('admin.customer_detail', compact('customer_detail', 'badges', 'orders', 'listings','sellerOrders'));
     }
 
     public function destroy($id) {

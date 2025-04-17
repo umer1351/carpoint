@@ -19,12 +19,16 @@ use DB;
 use Hash;
 use Auth;
 use Illuminate\Support\Facades\Mail;
+use App\Services\TwilioService;
+use Session;
 
 
 class CustomerAuthController extends Controller
 {
-	public function __construct() {
+    protected $twilio;
+	public function __construct(TwilioService $twilio) {
     	$this->middleware('guest:web')->except('logout');
+        $this->twilio = $twilio;
     }
 
     public function login() {
@@ -32,7 +36,9 @@ class CustomerAuthController extends Controller
     	return view('front.customer_login', compact('page_other_item'));
     }
 
+  
     public function login_store(Request $request) {
+
         $g_setting = GeneralSetting::where('id', 1)->first();
         $request->validate([
             'email' => 'required|email',
@@ -58,10 +64,77 @@ class CustomerAuthController extends Controller
         ];
 
         if(Auth::guard('web')->attempt($credential)) {
-            return redirect()->intended(route('customer_dashboard'))->with('success', SUCCESS_LOGIN);
+            return redirect()->intended(route('customer_dashboard'));
         } else {
             return redirect()->back()->with('error', ERR_CUSTOMER_NOT_FOUND);
         }
+            // $g_setting = GeneralSetting::where('id', 1)->first();
+            // $request->validate([
+            //     'email' => 'required|email',
+            //     'password' => 'required',
+            // ]);
+        
+            // if ($g_setting->google_recaptcha_status == 'Show') {
+            //     $request->validate([
+            //         'g-recaptcha-response' => 'required'
+            //     ]);
+            // }
+        
+            // $credential = [
+            //     'email' => $request->email,
+            //     'password' => $request->password,
+            //     'status' => 'Active'
+            // ];
+        
+            // if (Auth::guard('web')->attempt($credential)) {
+            //     $user = Auth::guard('web')->user();
+        
+            //     if (!$user->phone) {
+            //         return redirect()->back()->with('error', 'Phone number is required for OTP verification.');
+            //     }
+        
+            //     // Generate OTP
+            //     $otp = rand(100000, 999999);
+            //     Session::put('auth_user_id', $user->id);
+            //     Session::put('auth_otp', $otp);
+            //     Session::put('otp_verified', false); // ✅ OTP verified nahi hai
+        
+            //     // Send OTP via Twilio
+            //     // $this->twilio->sendOtp($user->phone, $otp);
+            //     // return redirect()->route('customer_otp');
+            //     // return redirect()->route('homes'); // ✅ Redirect to OTP page
+            // } else {
+            //     return redirect()->back()->with('error', 'Invalid credentials.');
+            // }
+        }
+        
+    
+    public function showOtpVerification()
+    {
+        return view('front.customer_otp_verify');
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        $request->validate(['otp' => 'required']);
+
+    $authUserId = Session::get('auth_user_id');
+    $sessionOtp = Session::get('auth_otp');
+
+    if (!$authUserId || !$sessionOtp) {
+        return redirect()->route('customer_login')->with('error', 'Session expired, please login again.');
+    }
+
+    // dd($request);
+    if ($request->otp == $sessionOtp) {
+        Auth::loginUsingId($authUserId);
+        Session::forget(['auth_otp']); // ✅ Remove OTP from session
+        Session::put('otp_verified', true); // ✅ Mark OTP as verified
+
+        return redirect()->route('customer_dashboard')->with('success', 'Login successful.');
+    } else {
+        return redirect()->back()->with('error', 'Invalid OTP.');
+    }
     }
 
     public function logout() {

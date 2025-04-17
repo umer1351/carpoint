@@ -243,8 +243,19 @@ $g_setting = \App\Models\GeneralSetting::where('id',1)->first();
                 <span>{{ HOME_ADVERTISEMENTS }}</span>
             </a>
         </li>
-
-
+        <li class="nav-item {{ $route == 'admin.messages.index' ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('admin.messages.index') }}">
+                <i class="far fa-caret-square-right"></i>
+                <span>Messages</span>
+            </a>
+        </li>
+        <li class="nav-item {{ $route == 'admin_finance_inquiries' ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('admin_finance_inquiries') }}">
+                <i class="far fa-caret-square-right"></i>
+                <span>Finance Inquiries</span>
+            </a>
+        </li>
+        
         <!-- Divider -->
         <hr class="sidebar-divider">
 

@@ -46,7 +46,8 @@ class Listing extends Model
         'seo_title',
         'seo_meta_description',
         'listing_status',
-        'is_featured'
+        'is_featured',
+        'is_sold'
     ];
 
     public function rListingBrand() {
