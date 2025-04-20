@@ -15,28 +15,23 @@ use App\Http\Controllers\Api\GarageController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\InspectionRequestController;
 use App\Http\Controllers\Api\ListingController;
+use App\Http\Controllers\Api\ListingBrandController;
 // use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserProfileController;
 
 Route::post('/profile/update', [UserProfileController::class, 'update']);
 Route::post('/profile/delete', [UserProfileController::class, 'delete']);
+// Route::post('/get-profile', [UserProfileController::class, 'profile']);
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/listings', [ListingController::class, 'index']);
+Route::get('/brands', [ListingBrandController::class, 'index']);
+Route::post('/get-profile', [UserProfileController::class, 'profile']);
 
 
 
-Route::prefix('listing')->group(function () {
-    Route::get('/detail/{slug}', [ListingController::class, 'detail']);
-    Route::get('/brand-all', [ListingController::class, 'brand_all']);
-    Route::get('/brand-detail/{slug}', [ListingController::class, 'brand_detail']);
-    Route::get('/location-all', [ListingController::class, 'location_all']);
-    Route::get('/location-detail/{slug}', [ListingController::class, 'location_detail']);
-    Route::get('/agent-detail/{type}/{id}', [ListingController::class, 'agent_detail']);
-    Route::post('/listing-result', [ListingController::class, 'listing_result']);
-});
 
 
 Route::post('inspection-request/{listingId}', [InspectionRequestController::class, 'requestInspection'])->name('inspection.request');

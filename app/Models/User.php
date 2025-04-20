@@ -51,4 +51,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Badge::class, 'user_badges_pivot')->withTimestamps();
     }
+    public function listings()
+    {
+        return $this->hasMany(Listing::class, 'user_id', 'id');
+    }
+
 }

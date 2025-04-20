@@ -14,7 +14,7 @@ class ListingController extends Controller
         $perPage = $request->get('per_page', 10);
 
         // Listing data with relationships
-        $listings = Listing::with(['rListingBrand', 'rListingLocation', 'user'])
+        $listings = Listing::with(['rListingBrand', 'rListingLocation', 'user', 'photos'])
     ->when($request->brand_id, fn ($q) => $q->where('listing_brand_id', $request->brand_id))
     ->when($request->location_id, fn ($q) => $q->where('listing_location_id', $request->location_id))
     ->when($request->listing_body, fn ($q) => $q->where('listing_body', $request->listing_body))
